@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:path/path.dart' as p;
 import 'package:system_tray/system_tray.dart';
 import 'package:win32/win32.dart';
+import 'package:windows_apps_time_measurements_app/models/app.dart';
 
 Future<void> initSystemTray() async {
   String path =
@@ -46,7 +47,7 @@ Future<void> initSystemTray() async {
 const PROCESS_QUERY_INFORMATION = 0x0400;
 const PROCESS_VM_READ = 0x0010;
 
-String trackActiveApp() {
+App? trackActiveApp() {
   // Get the handle of the currently active window
   final hWnd = GetForegroundWindow();
 
@@ -62,7 +63,7 @@ String trackActiveApp() {
 
   if (hProcess == NULL) {
     print('Failed to open process.');
-    return "";
+    return null;
   }
 
   // Allocate a buffer for the executable name as Uint16 and cast to Utf16
@@ -91,10 +92,13 @@ String trackActiveApp() {
     final windowTitle = buffer.toDartString();
     print('Active window: $windowTitle');
     print('Active app executable: $exeName');
-    return windowTitle.toString();
+    return App(
+        appName: exeName,
+        appTask: windowTitle,
+        createdAt: DateTime.timestamp());
   } else {
     print('Failed to get executable name.');
-    return 'Failed to get executable name.';
+    return null;
   }
 
   // Clean up
