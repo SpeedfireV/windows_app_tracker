@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 
+import '../../functions.dart';
 import '../../models/app.dart';
 import '../../services/db_services.dart';
 
@@ -20,7 +21,11 @@ class DbBloc extends Bloc<DbEvent, DbState> {
     });
     on<DbAddRecord>((event, emit) async {
       emit(DbAddingRecord());
-      await dbServices.addRecord(event.app);
+      final App? currentlyOpenApp = await trackActiveApp();
+      if (currentlyOpenApp != null) {
+        await dbServices.addRecord(currentlyOpenApp);
+      }
+
       emit(DbAddedRecord());
     });
     on<DbGetRecords>((event, emit) async {

@@ -5,10 +5,6 @@ sealed class DbEvent {}
 
 final class DbInit extends DbEvent {}
 
-final class DbAddRecord extends DbEvent {
-  final App app;
-
-  DbAddRecord(this.app);
-}
+final class DbAddRecord extends DbEvent {}
 
 final class DbGetRecords extends DbEvent {}
