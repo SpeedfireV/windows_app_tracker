@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:fluent_ui/fluent_ui.dart';
 
 class AppColors {
@@ -11,4 +13,14 @@ Color darkenColor(Color color, double amount) {
   final hsl = HSLColor.fromColor(color);
   final hslDark = hsl.withLightness((hsl.lightness - amount).clamp(0.0, 1.0));
   return hslDark.toColor();
+}
+
+Color generateVisibleColor(Color backgroundColor) {
+  // Generate a color with different hue but high lightness and saturation for visibility
+  final hslBackground = HSLColor.fromColor(backgroundColor);
+  final randomHue = Random().nextDouble(); // Random hue between 0.0 and 1.0
+  final visibleColor = HSLColor.fromAHSL(
+      1.0, randomHue * 360, 0.8, 0.7); // High saturation and lightness
+
+  return visibleColor.toColor();
 }

@@ -8,7 +8,7 @@ final class ChartsInitial extends ChartsState {}
 final class ChartsPieChartDataLoading extends ChartsState {}
 
 final class ChartsPieChartDataLoaded extends ChartsState {
-  final List<PieChartSectionData> data;
+  final List<PieChartSectionData> appsData, tasksData;
 
-  ChartsPieChartDataLoaded(this.data);
+  ChartsPieChartDataLoaded(this.appsData, this.tasksData);
 }

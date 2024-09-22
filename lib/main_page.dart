@@ -9,7 +9,6 @@ import 'package:windows_apps_time_measurements_app/app_colors.dart';
 
 import 'bloc/db_bloc/charts_bloc.dart';
 import 'bloc/db_bloc/db_bloc.dart';
-import 'models/app.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -23,20 +22,18 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<DbBloc, DbState>(
-      listener: (BuildContext context, dbState) {
-        if (dbState is DbInitialized) {
-          print("DB INITIALIZED!");
-          BlocProvider.of<ChartsBloc>(context)
-              .add(ChartsLoadPieChartData(context.read<DbBloc>().apps));
-        }
-        if (dbState is DbAddedRecord) {
-          context.read<DbBloc>().add(DbGetRecords());
-        }
-      },
-      builder: (context, dbState) {
-        final Iterable<App> apps = context.read<DbBloc>().apps;
-        return Container(
+    return BlocListener<DbBloc, DbState>(
+        listener: (BuildContext context, dbState) {
+          if (dbState is DbInitialized) {
+            print("DB INITIALIZED!");
+            BlocProvider.of<ChartsBloc>(context)
+                .add(ChartsLoadPieChartData(context.read<DbBloc>().apps));
+          }
+          if (dbState is DbAddedRecord) {
+            context.read<DbBloc>().add(DbGetRecords());
+          }
+        },
+        child: Container(
           color: AppColors.mainColor,
           child: Row(
             children: [
@@ -49,7 +46,36 @@ class _MainPageState extends State<MainPage> {
                         builder: (context, state) {
                           if (state is ChartsPieChartDataLoaded) {
                             print("STATE LOADED!");
-                            print(state.data.toString());
+                            Map<String, int> allApps =
+                                context.read<ChartsBloc>().allApps;
+                            Map<String, Map<String, int>>
+                                tasksAssociatedWithTaks =
+                                context.read<ChartsBloc>().allTasks;
+                            List<TreeViewItem> selectionItems = [];
+                            for (String appName in allApps.keys) {
+                              print("App Name: " + appName);
+                              List<TreeViewItem> tasksList = [];
+                              for (String task
+                                  in tasksAssociatedWithTaks[appName]!.keys) {
+                                tasksList.add(TreeViewItem(
+                                    content: Text(
+                                  task,
+                                  style: TextStyle(fontSize: 12),
+                                )));
+                              }
+                              TreeViewItem appTree = TreeViewItem(
+                                  lazy: true,
+                                  expanded: false,
+                                  content: Text(
+                                    appName,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 13),
+                                  ),
+                                  children: tasksList);
+                              selectionItems.add(appTree);
+                            }
+
                             return Row(
                               children: [
                                 Expanded(
@@ -60,7 +86,8 @@ class _MainPageState extends State<MainPage> {
                                         children: [
                                           PieChart(
                                             PieChartData(
-                                              sections: state.data,
+                                              sectionsSpace: 1,
+                                              sections: state.appsData,
                                             ),
                                             swapAnimationDuration: Duration(
                                                 milliseconds: 150), // Optional
@@ -70,7 +97,8 @@ class _MainPageState extends State<MainPage> {
                                             padding: const EdgeInsets.all(64.0),
                                             child: PieChart(
                                               PieChartData(
-                                                sections: state.data,
+                                                sectionsSpace: 1,
+                                                sections: state.tasksData,
                                               ),
                                               swapAnimationDuration: Duration(
                                                   milliseconds:
@@ -95,9 +123,49 @@ class _MainPageState extends State<MainPage> {
                                               Expanded(
                                                 flex: 6,
                                                 child: Container(
-                                                  child: ListView(
+                                                  child: Column(
                                                     children: [
-                                                      Text("HELLO"),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                horizontal:
+                                                                    16.0,
+                                                                vertical: 8),
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Text(
+                                                              "Apps & Tasks",
+                                                              style: TextStyle(
+                                                                  fontSize: 16,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w700),
+                                                            ),
+                                                            Checkbox(
+                                                              checked: true,
+                                                              onChanged: (v) {},
+                                                              content: Text(
+                                                                  "Switch All"),
+                                                            )
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        height: 1,
+                                                        color:
+                                                            AppColors.mainColor,
+                                                      ),
+                                                      TreeView(
+                                                          shrinkWrap: true,
+                                                          selectionMode:
+                                                              TreeViewSelectionMode
+                                                                  .multiple,
+                                                          items:
+                                                              selectionItems),
                                                     ],
                                                   ),
                                                   decoration: BoxDecoration(
@@ -144,14 +212,10 @@ class _MainPageState extends State<MainPage> {
                   ],
                 ),
               ),
-              ActivityLog(
-                apps: apps,
-              )
+              ActivityLog()
             ],
           ),
-        );
-      },
-    );
+        ));
   }
 
   @override
