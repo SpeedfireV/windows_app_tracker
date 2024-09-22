@@ -5,6 +5,10 @@ sealed class ChartsState {}
 
 final class ChartsInitial extends ChartsState {}
 
-final class ChartsDataLoading extends ChartsState {}
+final class ChartsPieChartDataLoading extends ChartsState {}
 
-final class ChartsDataLoaded extends ChartsState {}
+final class ChartsPieChartDataLoaded extends ChartsState {
+  final List<PieChartSectionData> data;
+
+  ChartsPieChartDataLoaded(this.data);
+}

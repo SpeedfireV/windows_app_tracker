@@ -16,6 +16,7 @@ class DbBloc extends Bloc<DbEvent, DbState> {
       emit(DbInitializing());
       dbServices = DbServices();
       await dbServices.initDb();
+      apps = await dbServices.getRecords();
       print("INITIALIZING!");
       emit(DbInitialized());
     });
