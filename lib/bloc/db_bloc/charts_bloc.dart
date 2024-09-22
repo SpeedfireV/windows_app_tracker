@@ -31,8 +31,8 @@ class ChartsBloc extends Bloc<ChartsEvent, ChartsState> {
         pieChartData.add(PieChartSectionData(
             title: appName,
             value: timeSpent.toDouble(),
-            badgeWidget: Text(timeSpent.toString()),
-            badgePositionPercentageOffset: -5));
+            color: Color(0xff0E6BA8),
+            showTitle: false));
       }
       print(pieChartData);
       emit(ChartsPieChartDataLoaded(pieChartData));

@@ -4,7 +4,8 @@ import 'dart:io';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
+import 'package:windows_apps_time_measurements_app/activity_log.dart';
+import 'package:windows_apps_time_measurements_app/app_colors.dart';
 
 import 'bloc/db_bloc/charts_bloc.dart';
 import 'bloc/db_bloc/db_bloc.dart';
@@ -19,7 +20,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   String currentApp = "";
-  late ScrollController activityLogController;
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<DbBloc, DbState>(
@@ -31,14 +32,12 @@ class _MainPageState extends State<MainPage> {
         }
         if (dbState is DbAddedRecord) {
           context.read<DbBloc>().add(DbGetRecords());
-          activityLogController
-              .jumpTo(activityLogController.position.maxScrollExtent);
         }
       },
       builder: (context, dbState) {
         final Iterable<App> apps = context.read<DbBloc>().apps;
         return Container(
-          color: Color(0xffE8998D),
+          color: AppColors.mainColor,
           child: Row(
             children: [
               Expanded(
@@ -54,20 +53,12 @@ class _MainPageState extends State<MainPage> {
                             return Row(
                               children: [
                                 Expanded(
-                                    flex: 3,
-                                    child: Stack(
-                                      children: [
-                                        PieChart(
-                                          PieChartData(
-                                            sections: state.data,
-                                          ),
-                                          swapAnimationDuration: Duration(
-                                              milliseconds: 150), // Optional
-                                          swapAnimationCurve: Curves.linear,
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(64.0),
-                                          child: PieChart(
+                                    flex: 2,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: Stack(
+                                        children: [
+                                          PieChart(
                                             PieChartData(
                                               sections: state.data,
                                             ),
@@ -75,10 +66,54 @@ class _MainPageState extends State<MainPage> {
                                                 milliseconds: 150), // Optional
                                             swapAnimationCurve: Curves.linear,
                                           ),
-                                        ),
-                                      ],
+                                          Padding(
+                                            padding: const EdgeInsets.all(64.0),
+                                            child: PieChart(
+                                              PieChartData(
+                                                sections: state.data,
+                                              ),
+                                              swapAnimationDuration: Duration(
+                                                  milliseconds:
+                                                      150), // Optional
+                                              swapAnimationCurve: Curves.linear,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     )),
-                                Flexible(flex: 2, child: Text("Hello"))
+                                Flexible(
+                                    flex: 2,
+                                    child: Column(
+                                      children: [
+                                        Expanded(flex: 5, child: Container()),
+                                        Expanded(
+                                          flex: 4,
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                  flex: 1, child: Container()),
+                                              Expanded(
+                                                flex: 6,
+                                                child: Container(
+                                                  child: ListView(
+                                                    children: [
+                                                      Text("HELLO"),
+                                                    ],
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.white,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              15)),
+                                                  margin: EdgeInsets.only(
+                                                      bottom: 16, right: 16),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    ))
                               ],
                             );
                           } else {
@@ -88,80 +123,29 @@ class _MainPageState extends State<MainPage> {
                         },
                       ),
                     ),
+                    Container(
+                      color: Colors.white,
+                      height: 2,
+                    ),
                     Flexible(
                         flex: 1,
-                        child: Column(
-                          children: [
-                            Container(
-                              child: Text("Data"),
-                            ),
-                          ],
+                        child: Container(
+                          color: Color(0xff0E0F27),
+                          width: double.infinity,
+                          height: double.infinity,
+                          child: Column(
+                            children: [
+                              Container(
+                                child: Text("Data"),
+                              ),
+                            ],
+                          ),
                         ))
                   ],
                 ),
               ),
-              Container(
-                decoration: BoxDecoration(color: Color(0xffEED2CC), boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(
-                        0.25), // Add some transparency to soften the shadow
-                    offset:
-                        Offset(-10, 0), // The horizontal offset for the shadow
-                    blurRadius: 20, // Increases blur for a smoother shadow
-                    spreadRadius: 5, // Controls the spread of the shadow
-                  )
-                ]),
-                width: 400,
-                child: Column(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Color(0xffEED2CC),
-                      ),
-                      padding: EdgeInsets.all(16),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Activity Log",
-                            style: TextStyle(fontWeight: FontWeight.w700),
-                          ),
-                          Expanded(child: Container()),
-                          Row(
-                            children: [
-                              Checkbox(
-                                  content: Text("Scroll To The Bottom"),
-                                  checked: true,
-                                  onChanged: (v) {}),
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                    Container(
-                      height: 0.4,
-                      color: Colors.grey,
-                    ),
-                    SizedBox(height: 8),
-                    Expanded(
-                      child: ListView.builder(
-                        controller: activityLogController,
-                        itemBuilder: (context, index) {
-                          return ListTile(
-                            // leading: Image(
-                            //   image: AssetImage(apps.elementAt(index).iconPath),
-                            // ),
-                            title: Text(apps.elementAt(index).appName),
-                            subtitle: Text(apps.elementAt(index).appTask),
-                            trailing: Text(DateFormat('yyyy-MM-dd HH:mm:ss')
-                                .format(apps.elementAt(index).createdAt)),
-                          );
-                        },
-                        itemCount: apps.length,
-                      ),
-                    ),
-                  ],
-                ),
+              ActivityLog(
+                apps: apps,
               )
             ],
           ),
@@ -173,7 +157,6 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     super.initState();
-    activityLogController = ScrollController();
     BlocProvider.of<DbBloc>(context).add(DbInit());
     Timer.periodic(Duration(seconds: 1), (timer) {
       context.read<DbBloc>().add(DbAddRecord());
@@ -183,7 +166,6 @@ class _MainPageState extends State<MainPage> {
   @override
   void dispose() {
     super.dispose();
-    activityLogController.dispose();
   }
 }
 

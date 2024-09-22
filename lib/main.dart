@@ -2,6 +2,7 @@ import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:windows_apps_time_measurements_app/app_colors.dart';
 import 'package:windows_apps_time_measurements_app/bloc/db_bloc/charts_bloc.dart';
 import 'package:windows_apps_time_measurements_app/bloc/db_bloc/db_bloc.dart';
 import 'package:windows_apps_time_measurements_app/functions.dart';
@@ -14,7 +15,7 @@ void main() async {
   runApp(const MyApp());
   doWhenWindowReady(() {
     final win = appWindow;
-    const initialSize = Size(1080, 600);
+    const initialSize = Size(1200, 720);
     win.minSize = initialSize;
     win.size = initialSize;
     win.alignment = Alignment.center;
@@ -50,49 +51,58 @@ class MyApp extends StatelessWidget {
                     Expanded(child: MainPage()),
                   ],
                 ),
-                Container(
-                  height: 40,
-                  color: Color(0xffFBF7F4),
-                  child: Row(
-                    children: [
-                      Expanded(child: MoveWindow()),
-                      Row(
-                        children: [
-                          SizedBox(
-                            height: 40,
-                            child: MinimizeWindowButton(
-                                colors: WindowButtonColors(
-                                    iconNormal: const Color(0xFF805306),
-                                    mouseOver: const Color(0xFFF6A00C),
-                                    mouseDown: const Color(0xFF805306),
-                                    iconMouseOver: const Color(0xFF805306),
-                                    iconMouseDown: const Color(0xFFFFD500))),
-                          ),
-                          SizedBox(
-                            height: 40,
-                            child: MaximizeWindowButton(
-                                colors: WindowButtonColors(
-                                    iconNormal: const Color(0xFF805306),
-                                    mouseOver: const Color(0xFFF6A00C),
-                                    mouseDown: const Color(0xFF805306),
-                                    iconMouseOver: const Color(0xFF805306),
-                                    iconMouseDown: const Color(0xFFFFD500))),
-                          ),
-                          SizedBox(
-                            height: 40,
-                            child: CloseWindowButton(
-                                colors: WindowButtonColors(
-                                    iconNormal: const Color(0xFF805306),
-                                    mouseOver: const Color(0xFFF6A00C),
-                                    mouseDown: const Color(0xFF805306),
-                                    iconMouseOver: const Color(0xFF805306),
-                                    iconMouseDown: const Color(0xFFFFD500))),
-                          ),
-                        ],
-                      )
-                    ],
+                Row(children: [
+                  Expanded(
+                      child: Container(
+                    height: 40,
+                    color: darkenColor(AppColors.mainColor, -0.1),
+                    child: MoveWindow(),
+                  )),
+                  Container(
+                    height: 40,
+                    width: 500,
+                    color: darkenColor(AppColors.sideColor, -0.1),
+                    child: Row(
+                      children: [
+                        Expanded(child: MoveWindow()),
+                        Row(
+                          children: [
+                            SizedBox(
+                              height: 40,
+                              child: MinimizeWindowButton(
+                                  colors: WindowButtonColors(
+                                      iconNormal: AppColors.snowishColor,
+                                      mouseOver: const Color(0xFFF6A00C),
+                                      mouseDown: const Color(0xFF805306),
+                                      iconMouseOver: const Color(0xFF805306),
+                                      iconMouseDown: const Color(0xFFFFD500))),
+                            ),
+                            SizedBox(
+                              height: 40,
+                              child: MaximizeWindowButton(
+                                  colors: WindowButtonColors(
+                                      iconNormal: AppColors.snowishColor,
+                                      mouseOver: const Color(0xFFF6A00C),
+                                      mouseDown: const Color(0xFF805306),
+                                      iconMouseOver: const Color(0xFF805306),
+                                      iconMouseDown: const Color(0xFFFFD500))),
+                            ),
+                            SizedBox(
+                              height: 40,
+                              child: CloseWindowButton(
+                                  colors: WindowButtonColors(
+                                      iconNormal: AppColors.snowishColor,
+                                      mouseOver: const Color(0xFFF6A00C),
+                                      mouseDown: const Color(0xFF805306),
+                                      iconMouseOver: const Color(0xFF805306),
+                                      iconMouseDown: const Color(0xFFFFD500))),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
                   ),
-                ),
+                ]),
               ],
             )),
       ),
