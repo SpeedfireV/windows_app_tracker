@@ -8,6 +8,8 @@ import 'package:windows_apps_time_measurements_app/bloc/db_bloc/db_bloc.dart';
 import 'package:windows_apps_time_measurements_app/functions.dart';
 import 'package:windows_apps_time_measurements_app/main_page.dart';
 
+import 'bloc/db_bloc/data_selection/data_selection_bloc.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initSystemTray();
@@ -34,7 +36,8 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (state) => DbBloc()),
-        BlocProvider(create: (state) => ChartsBloc())
+        BlocProvider(create: (state) => ChartsBloc()),
+        BlocProvider(create: (state) => DataSelectionBloc())
       ],
       child: FluentApp(
         debugShowCheckedModeBanner: false,

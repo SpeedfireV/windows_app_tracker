@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:windows_apps_time_measurements_app/app_colors.dart';
+import 'package:windows_apps_time_measurements_app/models/chart_data/chart_data.dart';
 import 'package:windows_apps_time_measurements_app/models/datefilter/date_filter.dart';
 
 import '../../models/app.dart';
@@ -27,43 +27,26 @@ class ChartsBloc extends Bloc<ChartsEvent, ChartsState> {
     on<ChartsLoadPieChartData>((event, emit) {
       emit(ChartsPieChartDataLoading());
       print("Received ${event.data}");
-      allActivity = event.data;
-      Map<String, int> apps = {};
-      Map<String, Map<String, int>> tasks = {};
-      if (allApps.isEmpty) {
-        allApps = apps;
-      }
-      if (allTasks.isEmpty) {
-        allTasks = tasks;
-      }
-      for (App app in allActivity) {
-        apps[app.appName] = (apps[app.appName] ?? 0) + 1;
-
-        if (tasks[app.appName] == null) {
-          tasks[app.appName] = {};
-        }
-        tasks[app.appName]![app.appTask] =
-            (tasks[app.appName]![app.appTask] ?? 0) + 1;
-      }
+      List<ChartData> allActivity = event.data;
       List<PieChartSectionData> appsPieChartData = [];
       List<PieChartSectionData> tasksPieChartData = [];
-      for (String appName in apps.keys) {
-        int timeSpent = apps[appName]!;
+      for (ChartData chartData in allActivity) {
         appsPieChartData.add(PieChartSectionData(
-            title: appName,
-            value: timeSpent.toDouble(),
-            color: generateVisibleColor(AppColors.mainColor),
+            title: chartData.appName,
+            value: chartData.getTotalTime().toDouble(),
+            color: chartData.color,
             showTitle: false));
-        for (String taskName in tasks[appName]!.keys) {
-          int timeSpent = tasks[appName]![taskName]!;
-          tasksPieChartData.add(PieChartSectionData(
-              title: taskName,
-              value: timeSpent.toDouble(),
-              color: generateVisibleColor(AppColors.mainColor),
-              showTitle: false));
+
+        for (String task in chartData.mapOfTasks.keys) {
+          if (chartData.mapOfTasks[task]!.active) {
+            tasksPieChartData.add(PieChartSectionData(
+                title: task,
+                value: chartData.mapOfTasks[task]!.time.toDouble(),
+                color: chartData.mapOfTasks[task]!.color,
+                showTitle: false));
+          }
         }
       }
-      print(appsPieChartData);
       emit(ChartsPieChartDataLoaded(appsPieChartData, tasksPieChartData));
     });
   }

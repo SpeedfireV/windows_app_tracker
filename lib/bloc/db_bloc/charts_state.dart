@@ -12,3 +12,5 @@ final class ChartsPieChartDataLoaded extends ChartsState {
 
   ChartsPieChartDataLoaded(this.appsData, this.tasksData);
 }
+
+final class ChartsChangingChartData extends ChartsState {}
