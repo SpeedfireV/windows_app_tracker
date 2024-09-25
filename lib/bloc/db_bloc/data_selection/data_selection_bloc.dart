@@ -10,11 +10,12 @@ part 'data_selection_event.dart';
 part 'data_selection_state.dart';
 
 class DataSelectionBloc extends Bloc<DataSelectionEvent, DataSelectionState> {
+  List<ChartData> chartData = [];
   DataSelectionBloc() : super(DataSelectionInitial()) {
     on<DataSelectionLoadData>((event, emit) {
       emit(DataSelectionUpdatingDataSelection());
       print("All activity: ${event.apps}");
-      List<ChartData> chartData = [];
+      chartData = [];
       Iterable<App> allActivity = event.apps;
       for (App app in allActivity) {
         bool foundInstance = false;
@@ -59,11 +60,11 @@ class DataSelectionBloc extends Bloc<DataSelectionEvent, DataSelectionState> {
     });
     on<DataSelectionUpdateData>((event, emit) {
       emit(DataSelectionUpdatingData());
-      List<ChartData> newChartData = event.currentData;
+      chartData = event.currentData;
 
       if (event.taskName == null) {
         print("Task name is null");
-        for (ChartData data in newChartData) {
+        for (ChartData data in chartData) {
           if (data.appName == event.appName) {
             print("Found corresponding App Name");
             Map<String, TaskInfo> newMapOfTasks = {};
@@ -73,17 +74,13 @@ class DataSelectionBloc extends Bloc<DataSelectionEvent, DataSelectionState> {
             }
             ChartData copiedData =
                 data.copyWith(active: event.adding, mapOfTasks: newMapOfTasks);
-            print("Previous data: $data");
-            print("Copied data: $copiedData");
-            int index = newChartData.indexOf(data);
-            print(newChartData);
-            newChartData[index] = copiedData;
-            print(newChartData);
+            int index = chartData.indexOf(data);
+            chartData[index] = copiedData;
             break;
           }
         }
       } else {
-        for (ChartData data in newChartData) {
+        for (ChartData data in chartData) {
           if (data.appName == event.appName) {
             Map<String, TaskInfo> newMapOfTasks =
                 Map<String, TaskInfo>.from(data.mapOfTasks);
@@ -101,14 +98,35 @@ class DataSelectionBloc extends Bloc<DataSelectionEvent, DataSelectionState> {
               copiedData = data.copyWith(mapOfTasks: newMapOfTasks);
             }
 
-            int index = newChartData.indexOf(data);
-            newChartData[index] = copiedData;
+            int index = chartData.indexOf(data);
+            chartData[index] = copiedData;
             break;
           }
         }
       }
 
-      emit(DataSelectionDataSelected(newChartData));
+      emit(DataSelectionDataSelected(chartData));
+    });
+    on<DataSelectionSwitchAll>((event, emit) {
+      emit(DataSelectionUpdatingData());
+      print("Chaning data!");
+      List<ChartData> currentData = [...chartData];
+      chartData = [];
+      for (ChartData data in currentData) {
+        Map<String, TaskInfo> newMapOfTasks =
+            Map<String, TaskInfo>.from(data.mapOfTasks);
+        for (String key in newMapOfTasks.keys) {
+          TaskInfo newTaskInfo =
+              newMapOfTasks[key]!.copyWith(active: event.turnOn);
+          newMapOfTasks[key] = newTaskInfo;
+        }
+        chartData.add(
+            data.copyWith(active: event.turnOn, mapOfTasks: newMapOfTasks));
+        print(chartData.last);
+      }
+      print(chartData);
+
+      emit(DataSelectionDataSelected(chartData));
     });
   }
 }

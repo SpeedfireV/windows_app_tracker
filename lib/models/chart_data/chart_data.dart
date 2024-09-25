@@ -15,12 +15,20 @@ class ChartData with _$ChartData {
     required Map<String, TaskInfo> mapOfTasks,
   }) = _ChartData;
 
-  int getTotalTime() {
+  int getActiveTasksTime() {
     int totalTime = 0;
     for (TaskInfo taskInfo in mapOfTasks.values) {
       if (taskInfo.active) {
         totalTime += taskInfo.time;
       }
+    }
+    return totalTime;
+  }
+
+  int getTotalTime() {
+    int totalTime = 0;
+    for (TaskInfo taskInfo in mapOfTasks.values) {
+      totalTime += taskInfo.time;
     }
     return totalTime;
   }

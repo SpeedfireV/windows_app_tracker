@@ -33,7 +33,7 @@ class ChartsBloc extends Bloc<ChartsEvent, ChartsState> {
       for (ChartData chartData in allActivity) {
         appsPieChartData.add(PieChartSectionData(
             title: chartData.appName,
-            value: chartData.getTotalTime().toDouble(),
+            value: chartData.getActiveTasksTime().toDouble(),
             color: chartData.color,
             showTitle: false));
 

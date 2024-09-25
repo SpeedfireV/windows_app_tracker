@@ -21,3 +21,10 @@ final class DataSelectionUpdateData extends DataSelectionEvent {
       this.taskName,
       required this.currentData});
 }
+
+final class DataSelectionSwitchAll extends DataSelectionEvent {
+  final List<ChartData> currentData;
+  final bool turnOn;
+
+  DataSelectionSwitchAll({required this.currentData, required this.turnOn});
+}
