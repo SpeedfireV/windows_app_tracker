@@ -33,7 +33,9 @@ class _ActivityLogState extends State<ActivityLog> {
   Widget build(BuildContext context) {
     return BlocBuilder<DbBloc, DbState>(
       builder: (context, state) {
-        Iterable<App> apps = context.read<DbBloc>().apps;
+        Iterable<App> apps = context.read<DbBloc>().latestApps;
+        Iterable<App> reversedApps = apps;
+
         return BlocProvider(
           create: (context) => ActivityLogCubit(),
           child: BlocBuilder<ActivityLogCubit, bool>(
@@ -41,8 +43,7 @@ class _ActivityLogState extends State<ActivityLog> {
               return BlocConsumer<DbBloc, DbState>(
                 listener: (context, dbState) {
                   if (dbState is DbAddedRecord && isScrollStickedToTheBottom) {
-                    activityLogController
-                        .jumpTo(activityLogController.position.maxScrollExtent);
+                    activityLogController.jumpTo(0);
                   }
                 },
                 builder: (context, state) {
@@ -77,7 +78,7 @@ class _ActivityLogState extends State<ActivityLog> {
                                 children: [
                                   Checkbox(
                                       content: Text(
-                                        "Scroll To The Bottom",
+                                        "Scroll To The Latest",
                                         style: TextStyle(
                                             fontWeight: FontWeight.w600,
                                             color: AppColors.snowishColor),
@@ -116,20 +117,17 @@ class _ActivityLogState extends State<ActivityLog> {
                               controller: activityLogController,
                               itemBuilder: (context, index) {
                                 return ListTile(
-                                  // leading: Image(
-                                  //   image: AssetImage(apps.elementAt(index).iconPath),
-                                  // ),
                                   contentPadding:
                                       EdgeInsets.only(left: 0, right: 20),
                                   title: Text(
-                                    apps.elementAt(index).appName,
+                                    reversedApps.elementAt(index).appName,
                                     style: TextStyle(
                                         color: AppColors.snowishColor,
                                         fontWeight: FontWeight.w500,
                                         fontSize: 14),
                                   ),
                                   subtitle: Text(
-                                    apps.elementAt(index).appTask,
+                                    reversedApps.elementAt(index).appTask,
                                     style: TextStyle(
                                         color: AppColors.snowishColor,
                                         fontSize: 11,
@@ -137,14 +135,16 @@ class _ActivityLogState extends State<ActivityLog> {
                                   ),
                                   trailing: Text(
                                     DateFormat('yyyy-MM-dd HH:mm:ss').format(
-                                        apps.elementAt(index).createdAt),
+                                        reversedApps
+                                            .elementAt(index)
+                                            .createdAt),
                                     style: TextStyle(
                                         color: AppColors.snowishColor,
                                         fontWeight: FontWeight.w300),
                                   ),
                                 );
                               },
-                              itemCount: apps.length,
+                              itemCount: reversedApps.length,
                             ),
                           ),
                         ),

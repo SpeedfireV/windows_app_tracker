@@ -14,7 +14,12 @@ class DataSelectionBloc extends Bloc<DataSelectionEvent, DataSelectionState> {
   DataSelectionBloc() : super(DataSelectionInitial()) {
     on<DataSelectionLoadData>((event, emit) {
       emit(DataSelectionUpdatingDataSelection());
+      final stopwatch = Stopwatch();
+      stopwatch.start();
       print("All activity: ${event.apps}");
+      for (var e in event.apps) {
+        print(e);
+      }
       chartData = [];
       Iterable<App> allActivity = event.apps;
       for (App app in allActivity) {
@@ -56,6 +61,8 @@ class DataSelectionBloc extends Bloc<DataSelectionEvent, DataSelectionState> {
               color: generateVisibleColor(AppColors.mainColor)));
         }
       }
+      stopwatch.stop();
+      print("Elapsed Time In DataSelection: ${stopwatch.elapsedMilliseconds}");
       emit(DataSelectionDataSelected(chartData));
     });
     on<DataSelectionUpdateData>((event, emit) {
@@ -128,5 +135,11 @@ class DataSelectionBloc extends Bloc<DataSelectionEvent, DataSelectionState> {
 
       emit(DataSelectionDataSelected(chartData));
     });
+  }
+
+  @override
+  void onChange(Change<DataSelectionState> change) {
+    super.onChange(change);
+    print(change);
   }
 }

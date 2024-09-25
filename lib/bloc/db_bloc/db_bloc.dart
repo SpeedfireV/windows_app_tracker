@@ -11,12 +11,15 @@ part 'db_state.dart';
 class DbBloc extends Bloc<DbEvent, DbState> {
   late final DbServices dbServices;
   Iterable<App> apps = [];
+  Iterable<App> latestApps = [];
+
   DbBloc() : super(DbInitial()) {
     on<DbInit>((event, emit) async {
       emit(DbInitializing());
       dbServices = DbServices();
       await dbServices.initDb();
       apps = await dbServices.getRecords();
+      latestApps = await dbServices.getLatestRecords();
       print("INITIALIZING!");
       emit(DbInitialized());
     });
@@ -32,6 +35,7 @@ class DbBloc extends Bloc<DbEvent, DbState> {
     on<DbGetRecords>((event, emit) async {
       emit(DbGettingRecords());
       apps = await dbServices.getRecords();
+      latestApps = await dbServices.getLatestRecords();
       emit(DbGotRecords());
     });
   }

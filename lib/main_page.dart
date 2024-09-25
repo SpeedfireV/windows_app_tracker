@@ -3,14 +3,13 @@ import 'dart:io';
 
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:windows_apps_time_measurements_app/activity_log.dart';
-import 'package:windows_apps_time_measurements_app/app_colors.dart';
-import 'package:windows_apps_time_measurements_app/charts_side.dart';
-import 'package:windows_apps_time_measurements_app/data_selection.dart';
 
-import 'bloc/db_bloc/charts_bloc.dart';
+import 'activity_log.dart';
+import 'app_colors.dart';
 import 'bloc/db_bloc/data_selection/data_selection_bloc.dart';
 import 'bloc/db_bloc/db_bloc.dart';
+import 'charts_side.dart';
+import 'data_selection.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -24,6 +23,9 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    // return Container(
+    //   child: Text("Hello world!"),
+    // );
     return BlocListener<DbBloc, DbState>(
         listener: (BuildContext context, dbState) {
           if (dbState is DbInitialized) {
@@ -48,11 +50,7 @@ class _MainPageState extends State<MainPage> {
                           BlocListener<DataSelectionBloc, DataSelectionState>(
                               listener: (context, dataSelectionState) {
                                 if (dataSelectionState
-                                    is DataSelectionDataSelected) {
-                                  BlocProvider.of<ChartsBloc>(context).add(
-                                      ChartsLoadPieChartData(
-                                          dataSelectionState.chartData));
-                                }
+                                    is DataSelectionDataSelected) {}
                               },
                               child: Row(
                                 children: const [ChartsSide(), DataSelection()],
