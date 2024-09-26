@@ -18,12 +18,8 @@ The following packages are used in the development of **App Tracker**:
 - **[Bloc](https://pub.dev/packages/bloc)**: For state management, allowing efficient handling of UI states and business logic.
 - **[SQFlite](https://pub.dev/packages/sqflite)**: Manage database & store data about app usage.
 - **[freezed](https://pub.dev/packages/freezed)**: Used for generating immutable classes with helpful utilities like `copyWith` and equality comparison.
-- **[fluent_ui](https://pub.dev/packages/fluent_ui)**: Provides Windows-like UI components, ensuring the app's interface matches the native Windows look and feel.
-<a title="Made with Fluent Design" href="https://github.com/bdlukaa/fluent_ui">
-  <img
-    src="https://img.shields.io/badge/fluent-design-blue?style=flat-square&color=gray&labelColor=0078D7"
-  />
-</a>
+- **[fluent_ui](https://pub.dev/packages/fluent_ui)**<a title="Made with Fluent Design" href="https://github.com/bdlukaa/fluent_ui"><imgsrc="https://img.shields.io/badge/fluent-design-blue?style=flat-square&color=gray&labelColor=0078D7"/></a>: Provides Windows-like UI components, ensuring the app's interface matches the native Windows look and feel.
+
 - **[win32](https://pub.dev/packages/win32)**: Used for accessing low-level Windows functions to manage system tray interactions and background processes.
 - **[fl_chart](https://pub.dev/packages/fl_chart)**: A package used to display charts, including the interactive pie chart for visualizing app usage.
 
