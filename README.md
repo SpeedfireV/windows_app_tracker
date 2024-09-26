@@ -39,7 +39,14 @@ Once the app is running, it will begin tracking your active apps and window name
 
 ## Screenshots
 
-_Include screenshots of the app interface here._
+![Pie Chart View](screenshots/s1.png)
+*Basic App View*
+
+![Activity Log](screenshots/s2.png)
+*Chart Data App Selection*
+
+![System Tray](screenshots/s3.png)
+*Chart Data Task Seletion & Activity Log Scrolling*
 
 ## Future Plans
 
