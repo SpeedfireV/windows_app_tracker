@@ -16,10 +16,6 @@ class DataSelectionBloc extends Bloc<DataSelectionEvent, DataSelectionState> {
       emit(DataSelectionUpdatingDataSelection());
       final stopwatch = Stopwatch();
       stopwatch.start();
-      print("All activity: ${event.apps}");
-      for (var e in event.apps) {
-        print(e);
-      }
       chartData = [];
       Iterable<App> allActivity = event.apps;
       for (App app in allActivity) {
@@ -116,12 +112,12 @@ class DataSelectionBloc extends Bloc<DataSelectionEvent, DataSelectionState> {
     });
     on<DataSelectionSwitchAll>((event, emit) {
       emit(DataSelectionUpdatingData());
-      print("Chaning data!");
       List<ChartData> currentData = [...chartData];
       chartData = [];
       for (ChartData data in currentData) {
         Map<String, TaskInfo> newMapOfTasks =
             Map<String, TaskInfo>.from(data.mapOfTasks);
+
         for (String key in newMapOfTasks.keys) {
           TaskInfo newTaskInfo =
               newMapOfTasks[key]!.copyWith(active: event.turnOn);
@@ -129,9 +125,7 @@ class DataSelectionBloc extends Bloc<DataSelectionEvent, DataSelectionState> {
         }
         chartData.add(
             data.copyWith(active: event.turnOn, mapOfTasks: newMapOfTasks));
-        print(chartData.last);
       }
-      print(chartData);
 
       emit(DataSelectionDataSelected(chartData));
     });

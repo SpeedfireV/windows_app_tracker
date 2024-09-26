@@ -12,8 +12,10 @@ import 'bloc/db_bloc/data_selection/highlighted_data_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  addAppToStartup();
   await initSystemTray();
   sqfliteFfiInit();
+
   runApp(const MyApp());
   doWhenWindowReady(() {
     final win = appWindow;
@@ -22,6 +24,7 @@ void main() async {
     win.size = initialSize;
     win.alignment = Alignment.center;
     win.title = "App Measurment";
+    win.show();
   });
 }
 

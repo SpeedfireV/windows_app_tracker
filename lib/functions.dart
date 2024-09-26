@@ -42,6 +42,32 @@ Future<void> initSystemTray() async {
       Platform.isWindows ? systemTray.popUpContextMenu() : appWindow.show();
     }
   });
+  appWindow.show();
+}
+
+void addAppToStartup() {
+  const startupKey = r'Software\Microsoft\Windows\CurrentVersion\Run';
+
+  final appName =
+      'windows_apps_time_measurements_app'; // Change this to your app's name
+  final executablePath = File(Platform.resolvedExecutable).parent.path +
+      '\\windows_apps_time_measurements_app.exe';
+
+  final hKey = calloc<HKEY>();
+  final result =
+      RegOpenKeyEx(HKEY_CURRENT_USER, TEXT(startupKey), 0, KEY_SET_VALUE, hKey);
+
+  if (result == ERROR_SUCCESS) {
+    final pathPtr = TEXT(executablePath);
+    RegSetValueEx(hKey.value, TEXT(appName), 0, REG_SZ, pathPtr.cast<BYTE>(),
+        (executablePath.length + 1) * 2);
+    RegCloseKey(hKey.value);
+    free(pathPtr);
+  } else {
+    print('Failed to open registry key');
+  }
+
+  free(hKey);
 }
 
 // Define constants for process access
