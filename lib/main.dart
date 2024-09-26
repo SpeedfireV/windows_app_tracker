@@ -94,15 +94,25 @@ class MyApp extends StatelessWidget {
                                       iconMouseDown: const Color(0xFFFFD500))),
                             ),
                             SizedBox(
-                              height: 40,
-                              child: CloseWindowButton(
-                                  colors: WindowButtonColors(
-                                      iconNormal: AppColors.snowishColor,
-                                      mouseOver: const Color(0xFFF6A00C),
-                                      mouseDown: const Color(0xFF805306),
-                                      iconMouseOver: const Color(0xFF805306),
-                                      iconMouseDown: const Color(0xFFFFD500))),
-                            ),
+                                height: 40,
+                                child: WindowButton(
+                                    iconBuilder: (context) => Container(
+                                          child: Icon(
+                                            FluentIcons.chrome_close,
+                                            size: 9,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                    onPressed: () {
+                                      appWindow.hide();
+                                    },
+                                    colors: WindowButtonColors(
+                                        iconNormal: AppColors.snowishColor,
+                                        mouseOver: const Color(0xFFF6A00C),
+                                        mouseDown: const Color(0xFF805306),
+                                        iconMouseOver: const Color(0xFF805306),
+                                        iconMouseDown:
+                                            const Color(0xFFFFD500)))),
                           ],
                         )
                       ],
