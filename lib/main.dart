@@ -62,7 +62,34 @@ class MyApp extends StatelessWidget {
                       child: Container(
                     height: 40,
                     color: darkenColor(AppColors.mainColor, -0.1),
-                    child: MoveWindow(),
+                    child: Stack(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            // SizedBox(
+                            //   width: 8,
+                            // ),
+                            // Image(
+                            //   image: AssetImage("assets/app_icon.png"),
+                            //   width: 24,
+                            //   height: 24,
+                            // ),
+                            SizedBox(width: 16),
+                            Text(
+                              "Windows App Tracker",
+                              style: TextStyle(
+                                  color: AppColors.snowishColor,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 17),
+                            ),
+                            Expanded(child: Container())
+                          ],
+                        ),
+                        MoveWindow(),
+                      ],
+                    ),
                   )),
                   Container(
                     height: 40,
