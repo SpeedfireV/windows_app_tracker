@@ -23,7 +23,7 @@ void main() async {
     win.minSize = initialSize;
     win.size = initialSize;
     win.alignment = Alignment.center;
-    win.title = "App Measurment";
+    win.title = "App Tracker";
     win.hide();
   });
 }

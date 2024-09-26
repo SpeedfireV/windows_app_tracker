@@ -53,6 +53,7 @@ dependencies:
   image: ^4.2.0
   flutter_launcher_icons: ^0.14.1
   msix: ^3.16.8
+  rename_app: ^1.6.1
 
 dev_dependencies:
   flutter_test:
