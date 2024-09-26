@@ -31,9 +31,11 @@ class _ChartsSideState extends State<ChartsSide> {
           stopwatch.start();
           for (ChartData chartData in state.chartData) {
             bool appSelected;
+            print(highlightedState);
             if (highlightedState != null &&
                 highlightedState.active == true &&
-                highlightedState.appName == chartData.appName) {
+                highlightedState.appName == chartData.appName &&
+                highlightedState.mapOfTasks.isEmpty) {
               appSelected = true;
             } else {
               appSelected = false;
@@ -125,6 +127,10 @@ class _ChartsSideState extends State<ChartsSide> {
                                       color: Colors.white,
                                       active: true,
                                       mapOfTasks: {}));
+                            } else {
+                              context
+                                  .read<HighlightedDataCubit>()
+                                  .resetSelection();
                             }
                           })),
                       swapAnimationDuration:
@@ -159,9 +165,7 @@ class _ChartsSideState extends State<ChartsSide> {
                                                   color: Colors.white,
                                                   time: 0)
                                         }));
-                              } else if (highlightedState != null &&
-                                  highlightedState.active == false &&
-                                  highlightedState.mapOfTasks.isEmpty) {
+                              } else {
                                 context
                                     .read<HighlightedDataCubit>()
                                     .resetSelection();

@@ -68,13 +68,6 @@ dev_dependencies:
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
-msix_config:
-  display_name: Windows App Tracker
-  publisher_display_name: Grzanston
-  identity_name: company.suite.flutterapp
-  logo_path: assets/app_icon.ico
-  certificate_path: CERTIFICATE.pfx
-  certificate_password: kuba
 
 
 
