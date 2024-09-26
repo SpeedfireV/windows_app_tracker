@@ -4,11 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:windows_apps_time_measurements_app/app_colors.dart';
 import 'package:windows_apps_time_measurements_app/bloc/db_bloc/db_bloc.dart';
-import 'package:windows_apps_time_measurements_app/functions.dart';
-import 'package:windows_apps_time_measurements_app/main_page.dart';
 
 import 'bloc/db_bloc/data_selection/data_selection_bloc.dart';
 import 'bloc/db_bloc/data_selection/highlighted_data_cubit.dart';
+import 'functions.dart';
+import 'main_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,7 +24,7 @@ void main() async {
     win.size = initialSize;
     win.alignment = Alignment.center;
     win.title = "App Measurment";
-    win.show();
+    win.hide();
   });
 }
 
@@ -53,6 +53,7 @@ class MyApp extends StatelessWidget {
                     Container(
                       height: 40,
                     ),
+                    // Text("Working")
                     Expanded(child: MainPage()),
                   ],
                 ),
