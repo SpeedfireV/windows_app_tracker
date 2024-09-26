@@ -68,4 +68,8 @@ Once the app is running, it will begin tracking your active apps and window name
 - **Interactive Table**: Create an interactive table that sums total time spent on each app and allows users to manage and explore the data easily.
 - **Export to CSV**: Make it possible to export the tracked app data to CSV for further analysis or reporting.
 
-<a title="Made with Fluent Design" href="https://github.com/bdlukaa/fluent_ui"><imgsrc="https://img.shields.io/badge/fluent-design-blue?style=flat-square&color=gray&labelColor=0078D7"/></a>
+<a title="Made with Fluent Design" href="https://github.com/bdlukaa/fluent_ui">
+  <img
+    src="https://img.shields.io/badge/fluent-design-blue?style=flat-square&color=gray&labelColor=0078D7"
+  />
+</a>
