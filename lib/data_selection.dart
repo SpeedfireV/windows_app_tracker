@@ -17,6 +17,8 @@ class DataSelection extends StatefulWidget {
 }
 
 class _DataSelectionState extends State<DataSelection> {
+  final double _taskHeight = 32;
+  final double _appHeight = 36;
   bool selected = true;
   late final ScrollController selectionController;
   @override
@@ -46,14 +48,21 @@ class _DataSelectionState extends State<DataSelection> {
                 return BlocBuilder<ExpandedCubit, String?>(
                     builder: (context, expandedState) {
                   List<TreeViewItem> selectionItems = [];
+                  int expandedElements = 0;
                   for (ChartData chartData in state.chartData) {
                     List<TreeViewItem> subList = [];
+                    bool anyTaskHighlighted = false;
+                    int numberOfElements = 0;
                     for (String task in chartData.mapOfTasks.keys) {
+                      numberOfElements += 1;
                       bool taskHighlited;
                       if (hightlightedState != null &&
                           hightlightedState.mapOfTasks.isNotEmpty &&
                           hightlightedState.mapOfTasks.keys.first == task) {
                         taskHighlited = true;
+                        anyTaskHighlighted = true;
+                        expandedElements = numberOfElements;
+
                         context
                             .read<ExpandedCubit>()
                             .addExpanded(chartData.appName);
@@ -77,29 +86,34 @@ class _DataSelectionState extends State<DataSelection> {
                               print("CLICKED $item");
                             }
                           },
-                          content: Padding(
-                            padding: const EdgeInsets.only(right: 12.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    task,
-                                    style: TextStyle(
-                                        fontSize: taskHighlited ? 13 : 12,
-                                        fontWeight: taskHighlited
-                                            ? FontWeight.w600
-                                            : FontWeight.w400),
+                          content: SizedBox(
+                            height: _taskHeight,
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  right: 12.0, top: 0, bottom: 0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      task,
+                                      style: TextStyle(
+                                          fontSize: taskHighlited ? 13 : 12,
+                                          fontWeight: taskHighlited
+                                              ? FontWeight.w600
+                                              : FontWeight.w400),
+                                    ),
                                   ),
-                                ),
-                                SizedBox(
-                                  width: 16,
-                                ),
-                                Text(
-                                  formatDuration(
-                                      chartData.mapOfTasks[task]!.time),
-                                )
-                              ],
+                                  SizedBox(
+                                    width: 16,
+                                  ),
+                                  Text(
+                                    formatDuration(
+                                        chartData.mapOfTasks[task]!.time),
+                                  )
+                                ],
+                              ),
                             ),
                           )));
                     }
@@ -112,10 +126,12 @@ class _DataSelectionState extends State<DataSelection> {
                     } else {
                       appHighlighted = false;
                     }
+                    bool isExpanded = context.read<ExpandedCubit>().state ==
+                        chartData.appName;
+
                     final TreeViewItem appTreeViewItem = TreeViewItem(
                         value: chartData,
-                        expanded: context.read<ExpandedCubit>().state ==
-                            chartData.appName,
+                        expanded: isExpanded,
                         onInvoked: (item, reason) async {
                           if (reason ==
                               TreeViewItemInvokeReason.selectionToggle) {
@@ -137,27 +153,49 @@ class _DataSelectionState extends State<DataSelection> {
                           }
                         },
                         children: subList,
-                        content: Padding(
-                          padding: const EdgeInsets.only(right: 12.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  chartData.appName,
-                                  style: TextStyle(
-                                      fontSize: appHighlighted ? 15 : 13,
-                                      fontWeight: appHighlighted
-                                          ? FontWeight.w600
-                                          : FontWeight.w400),
+                        content: SizedBox(
+                          height: _appHeight,
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 12.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    chartData.appName,
+                                    style: TextStyle(
+                                        fontSize: appHighlighted ? 15 : 13,
+                                        fontWeight: appHighlighted
+                                            ? FontWeight.w600
+                                            : FontWeight.w400),
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                  "${formatDuration(chartData.getActiveTasksTime())} s (Total: ${formatDuration(chartData.getTotalTime())})")
-                            ],
+                                Text(
+                                    "${formatDuration(chartData.getActiveTasksTime())} s (Total: ${formatDuration(chartData.getTotalTime())})")
+                              ],
+                            ),
                           ),
                         ));
                     selectionItems.add(appTreeViewItem);
+                    if (isExpanded &&
+                        !appHighlighted &&
+                        expandedElements == 0) {
+                      expandedElements = subList.length;
+                    }
+                    if (appHighlighted || anyTaskHighlighted) {
+                      print(
+                          "There are $expandedElements expanded elements which take ${expandedElements * _taskHeight} height and additional ${(expandedElements) * 4} space between them");
+                      print(
+                          "There are ${selectionItems.length - 1} selected items which totally take ${(selectionItems.length - 1) * _appHeight} space & additional ${(selectionItems.length - 1) * 4} space between them");
+                      double totalSpaceBetween =
+                          (selectionItems.length + expandedElements - 1) * 4;
+                      double totalHeight =
+                          (selectionItems.length - 1) * _appHeight +
+                              (expandedElements * _taskHeight);
+
+                      selectionController
+                          .jumpTo(totalHeight + totalSpaceBetween);
+                    }
                   }
                   return Flexible(
                       flex: 2,
