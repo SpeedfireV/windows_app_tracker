@@ -11,6 +11,18 @@ App Tracker is a Flutter-based Windows desktop application designed to help user
 - **System Tray Support**: The app runs in the system tray, continuing to track apps even when minimized.
 - **Autostart on System Boot**: The app starts automatically when Windows boots, ensuring continuous tracking.
 
+## Used Packages
+
+The following packages are used in the development of **App Tracker**:
+
+- **[Bloc](https://pub.dev/packages/bloc)**: For state management, allowing efficient handling of UI states and business logic.
+- **[SQFlite](https://pub.dev/packages/sqflite)**: Manage database & store data about app usage.
+- **[freezed](https://pub.dev/packages/freezed)**: Used for generating immutable classes with helpful utilities like `copyWith` and equality comparison.
+- **[fluent_ui](https://pub.dev/packages/fluent_ui)**: Provides Windows-like UI components, ensuring the app's interface matches the native Windows look and feel.
+- **[win32](https://pub.dev/packages/win32)**: Used for accessing low-level Windows functions to manage system tray interactions and background processes.
+- **[fl_chart](https://pub.dev/packages/fl_chart)**: A package used to display charts, including the interactive pie chart for visualizing app usage.
+
+
 ## Table Structure
 
 The app uses a single table in the SQFlite database to store the tracked data. The table has the following structure:
