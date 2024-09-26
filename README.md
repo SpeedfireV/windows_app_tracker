@@ -13,7 +13,7 @@ App Tracker is a Flutter-based Windows desktop application designed to help user
 
 ## Used Packages
 
-The following packages are used in the development of **App Tracker**:
+The following packages are used in the development of **App Tracker** among others:
 
 - **[Bloc](https://pub.dev/packages/bloc)**: For state management, allowing efficient handling of UI states and business logic.
 - **[SQFlite](https://pub.dev/packages/sqflite)**: Manage database & store data about app usage.
