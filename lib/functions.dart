@@ -42,7 +42,7 @@ Future<void> initSystemTray() async {
       Platform.isWindows ? systemTray.popUpContextMenu() : appWindow.show();
     }
   });
-  appWindow.show();
+  appWindow.hide();
 }
 
 void addAppToStartup() {
