@@ -67,6 +67,7 @@ Once the app is running, it will begin tracking your active apps and window name
 - **More Filters**: Implement advanced filtering options like date range selection and query-based searches for more granular analysis.
 - **Interactive Table**: Create an interactive table that sums total time spent on each app and allows users to manage and explore the data easily.
 - **Export to CSV**: Make it possible to export the tracked app data to CSV for further analysis or reporting.
+- **Clound & Authentication**: Enable user to register/log in and make it possible to synchronize databases between devices.
 
 <a title="Made with Fluent Design" href="https://github.com/bdlukaa/fluent_ui">
   <img
